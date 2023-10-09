@@ -1,4 +1,4 @@
-INFO:root:Successfully connected to the PostgreSQL database
-INFO:root:Query executed successfully: SELECT * FROM dim_track;
-INFO:root:Query result: []
-INFO:root:PostgreSQL connection closed
+2023-10-09 20:07:36;INFO;Successfully connected to the PostgreSQL database
+2023-10-09 20:07:36;INFO;Query executed successfully: SELECT * FROM dim_track;
+2023-10-09 20:07:36;INFO;Query result: []
+2023-10-09 20:07:36;INFO;PostgreSQL connection closed

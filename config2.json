@@ -1,0 +1,7 @@
+{
+    "database": "MusicDatabase",
+    "user": "postgres",
+    "password": "Xup_am5ql",
+    "host": "localhost",
+    "port": "5432"
+  }
