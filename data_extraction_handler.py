@@ -1,7 +1,7 @@
 import pandas as pd
 import psycopg2
 from lookups import FileType,ErrorHandling
-from data_logging import return_error_log
+from logging_handler import return_error_log
 
 def extract_data_into_df(data_type,data_path):
     data_frame=None
