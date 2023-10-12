@@ -1,6 +1,7 @@
 import psycopg2
 import logging
 from logging_handler import Logger
+from lookups import LogLevels
 import json
 
 local_logger = Logger(log_file='app.log')
@@ -11,12 +12,10 @@ def load_config(filename='config2.json'):
             config = json.load(file)
             return config
     except FileNotFoundError:
-        local_logger.set_log_level(logging.ERROR)
-        local_logger.log_message('Config file not found: %s' % filename)
+        local_logger.log_message(LogLevels.ERROR,'Config file not found: %s' % filename)
         return None
     except json.JSONDecodeError:
-        local_logger.set_log_level(logging.ERROR)
-        local_logger.log_message('Error decoding JSON from config file: %s' % filename)
+        local_logger.log_message(LogLevels.ERROR,'Error decoding JSON from config file: %s' % filename)
         return None
 
 def create_connection():
@@ -32,12 +31,11 @@ def create_connection():
             host=config['host'],
             port=config['port']
         )
-        local_logger.set_log_level(logging.INFO)
-        local_logger.log_message('Successfully connected to the PostgreSQL database')        
+        
+        local_logger.log_message(LogLevels.INFO,'Successfully connected to the PostgreSQL database')        
         return conn
     except (Exception, psycopg2.Error) as error:
-        local_logger.set_log_level(logging.ERROR)
-        local_logger.log_message('Error connecting to the PostgreSQL database: %s' % error)
+        local_logger.log_message(LogLevels.ERROR,'Error connecting to the PostgreSQL database: %s' % error)
         return None
 
 def execute_query(conn, query):
@@ -47,15 +45,15 @@ def execute_query(conn, query):
         cursor.execute(query)
         result = cursor.fetchall()  # Fetch all results
         conn.commit()
-        local_logger.set_log_level(logging.INFO)
-        local_logger.log_message('Query executed successfully: %s' % query)
-        local_logger.log_message('Query result: %s' % json.dumps(result, indent=2))  # Log the result
+        #local_logger.set_log_level(logging.INFO)
+        local_logger.log_message(LogLevels.DEBUG,'Query executed successfully: %s' % query)
+        local_logger.log_message(LogLevels.INFO,'Query result: %s' % json.dumps(result, indent=2))  # Log the result
         return result  # Return the result for further processing if needed
     except (Exception, psycopg2.Error) as error:
         if cursor:
             conn.rollback()
-        local_logger.set_log_level(logging.ERROR)
-        local_logger.log_message('Error executing query: %s' % error, exc_info=True)
+        
+        local_logger.log_message(LogLevels.ERROR,'Error executing query: %s' % error, exc_info=True)
         return None
     finally:
         if cursor:
@@ -64,7 +62,7 @@ def execute_query(conn, query):
 def close_connection(conn):
     if conn is not None:
         conn.close()
-        local_logger.log_message('PostgreSQL connection closed')
+        local_logger.log_message(LogLevels.INFO,'PostgreSQL connection closed')
 
 def try_connection():
     try:
@@ -72,8 +70,8 @@ def try_connection():
         query = "SELECT * FROM dim_track;"
         execute_query(connection, query)
     except Exception as e:
-        local_logger.set_log_level(logging.ERROR)
-        local_logger.log_message('An error occurred: %s' % str(e))
+        
+        local_logger.log_message(LogLevels.ERROR,'An error occurred: %s' % str(e))
     finally:
         close_connection(connection)
 

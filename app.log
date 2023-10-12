@@ -1,4 +1,4 @@
-2023-10-09 21:33:57;INFO;Successfully connected to the PostgreSQL database
-2023-10-09 21:33:57;INFO;Query executed successfully: SELECT * FROM dim_track;
-2023-10-09 21:33:57;INFO;Query result: []
-2023-10-09 21:33:57;INFO;PostgreSQL connection closed
+2023-10-12 09:59:07;INFO;Successfully connected to the PostgreSQL database
+2023-10-12 09:59:07;DEBUG;Query executed successfully: SELECT * FROM dim_track;
+2023-10-12 09:59:07;INFO;Query result: []
+2023-10-12 09:59:07;INFO;PostgreSQL connection closed

@@ -1,5 +1,5 @@
 import logging
-
+from lookups import LogLevels
 class Logger:
   def __init__(self, log_file=None):
         self.log_file = log_file  # Store the log file name as an instance variable
@@ -7,7 +7,7 @@ class Logger:
         self._configure_logger()
 
   def _configure_logger(self):
-        mode = 'w' if self.log_file else 'a'  # Use 'w' (write mode) if a log file is specified
+        mode = 'w' if self.log_file else 'a'  #  'w' (write mode) if a log file is specified
         logging.basicConfig(
             format="%(asctime)s;%(levelname)s;%(message)s",
             datefmt="%Y-%m-%d %H:%M:%S",
@@ -18,16 +18,15 @@ class Logger:
         )
         self.logger = logging.getLogger()
 
-  def set_log_level(self, log_level):
-        self._log_level = log_level
-        self.logger.setLevel(log_level)
 
-  def log_message(self, log_mess):
-        if self.logger.level == logging.DEBUG:
+
+  def log_message(self,inputLogLevel, log_mess):
+        if inputLogLevel==LogLevels.DEBUG:
             self.logger.debug(log_mess)
-        elif self.logger.level == logging.INFO:
+        elif inputLogLevel==LogLevels.INFO:
             self.logger.info(log_mess)
-        elif self.logger.level == logging.WARNING:
-            self.logger.warning(log_mess)
-        elif self.logger.level == logging.ERROR:
+        elif inputLogLevel==LogLevels.ERROR:
             self.logger.error(log_mess)
+        elif inputLogLevel==LogLevels.WARNING:
+            self.logger.warning(log_mess)
+
