@@ -1,0 +1,4 @@
+2023-10-19 10:11:48;ERROR;Error connecting to the PostgreSQL database: connection to server at "localhost" (::1), port 5432 failed: FATAL:  password authentication failed for user "postgres"
+
+2023-10-19 10:13:16;INFO;Successfully connected to the PostgreSQL database
+2023-10-19 10:13:35;INFO;Successfully connected to the PostgreSQL database

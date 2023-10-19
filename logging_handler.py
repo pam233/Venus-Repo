@@ -1,5 +1,7 @@
 import logging
 from lookups import LogLevels
+
+
 class Logger:
   def __init__(self, log_file=None):
         self.log_file = log_file  # Store the log file name as an instance variable
@@ -21,6 +23,7 @@ class Logger:
 
 
   def log_message(self,inputLogLevel, log_mess):
+        pass
         if inputLogLevel==LogLevels.DEBUG:
             self.logger.debug(log_mess)
         elif inputLogLevel==LogLevels.INFO:

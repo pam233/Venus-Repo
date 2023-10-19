@@ -32,9 +32,9 @@ def preprocess_data(data):
     return data
 
 
-def main():
-    file_path = 'Spotify_data(1).xlsx'
-    music_data = load_data(file_path)
+# def main():
+#     file_path = 'Spotify_data(1).xlsx'
+#     music_data = load_data(file_path)
     
-    explore_data(music_data)
+#     explore_data(music_data)
     
