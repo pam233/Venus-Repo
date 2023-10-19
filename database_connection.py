@@ -6,7 +6,7 @@ import datetime
 logging.basicConfig(filename='app.log', level=logging.INFO)
 
 
-def load_config(filename='config.json'):
+def load_config(filename='config2.json'):
     try:
         with open(filename, 'r') as file:
             config = json.load(file)

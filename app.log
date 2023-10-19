@@ -1,4 +1,7 @@
-2023-10-12 09:59:07;INFO;Successfully connected to the PostgreSQL database
-2023-10-12 09:59:07;DEBUG;Query executed successfully: SELECT * FROM dim_track;
-2023-10-12 09:59:07;INFO;Query result: []
-2023-10-12 09:59:07;INFO;PostgreSQL connection closed
+2023-10-19 08:22:25;INFO;Successfully connected to the PostgreSQL database
+2023-10-19 08:22:25;DEBUG;Query executed successfully: SELECT * FROM dim_track;
+2023-10-19 08:22:25;INFO;Query result: []
+2023-10-19 08:22:25;INFO;PostgreSQL connection closed
+ERROR:root:Error connecting to the PostgreSQL database: connection to server at "localhost" (::1), port 5432 failed: FATAL:  password authentication failed for user "maria"
+
+ERROR:root:Error executing query: 'NoneType' object has no attribute 'cursor'

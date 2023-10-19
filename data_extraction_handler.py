@@ -11,8 +11,7 @@ def extract_data_into_df(data_type,data_path):
         elif data_type==FileType.EXCEL:
              data_frame=pd.read_excel(data_path)
         elif data_type==FileType.PostgreSQL:
-             pass
-        elif data_type==FileType.mongoDB:
+            #  pd.read_sql
              pass
     except Exception as e:
         suffix=ErrorHandling.extract_data_info_df.value
@@ -22,4 +21,5 @@ def extract_data_into_df(data_type,data_path):
         return data_frame
     
 def list_all_files(file_directory):
+    # return list of query content into a list
     pass
