@@ -23,7 +23,7 @@ def create_table_from_df(dataframe, schema_name, table_name, connection_string):
     create_table_statement += "\n);"
 
     try:
-        conn = psycopg2.connect(config.json)
+        conn = psycopg2.connect("config.json")
         cursor = conn.cursor()
         cursor.execute(create_table_statement)
         conn.commit()

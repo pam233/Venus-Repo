@@ -1,7 +1,7 @@
 import requests
 import pandas as pd
 import json
-from database_connection_with_logging_handler import create_connection
+from database_connection import create_connection
 
 
 def load_data_into_dataframe(file_path, file_type, db_connection=None):
