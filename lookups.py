@@ -16,4 +16,6 @@ class LogLevels:
     INFO = 'INFO'
     WARNING = 'WARNING'
     ERROR = 'ERROR'
+
+    #ADD HERE IF YOU WANT TO ADD ANYTHING 
    
