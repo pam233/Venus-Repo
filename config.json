@@ -1,8 +1,7 @@
 {
-    "database": "dvd_rental",
-    "user": "postgres",
-    "password": "admin",
-    "host": "localhost",
-    "port": "5432"
-  }
-  
+  "database": "MusicDatabase",
+  "user": "maria",
+  "password": "musrecsys7mpsswd",
+  "host": "localhost",
+  "port": "5432"
+}
