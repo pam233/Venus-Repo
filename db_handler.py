@@ -53,11 +53,15 @@ def execute_query(conn, query):
         if cursor:
             conn.rollback()
         
-        local_logger.log_message(LogLevels.ERROR,'Error executing query: %s' % error, exc_info=True)
+        local_logger.log_message(LogLevels.ERROR,'Error executing query: %s' % error)
         return None
     finally:
         if cursor:
             cursor.close()
+
+
+
+
 
 def close_connection(conn):
     if conn is not None:

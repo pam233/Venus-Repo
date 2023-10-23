@@ -16,5 +16,10 @@ class LogLevels:
     WARNING = 'WARNING'
     ERROR = 'ERROR'
 
-    #ADD HERE IF YOU WANT TO ADD ANYTHING 
+class HandledType(Enum):
+  TIMESTAMP = "<class 'pandas.libs.tslibs.timestamps.Timestamp>"
+  INTEGER="<class 'int>"
+  STRING = "<class 'str'>"
+  FLOAT ="<class 'float'>"
+  LIST="<class 'list'>"
    
