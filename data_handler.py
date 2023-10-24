@@ -87,4 +87,7 @@ def insert_statements_from_dataframe(dataframe, schema_name, table_name):
 
     return insert_statements
 
+
+
+
 # Use the function to get insert queries for each row in the dataframe

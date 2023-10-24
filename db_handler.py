@@ -54,6 +54,7 @@ def execute_query(conn, query):
             conn.rollback()
         
         local_logger.log_message(LogLevels.ERROR,'Error executing query: %s' % error)
+        local_logger.log_message(LogLevels.INFO,query)
         return None
     finally:
         if cursor:
@@ -71,7 +72,7 @@ def close_connection(conn):
 def try_connection():
     try:
         connection = create_connection()
-        query = "SELECT * FROM dim_track;"
+        query = "SELECT 1 ;"
         execute_query(connection, query)
     except Exception as e:
         
