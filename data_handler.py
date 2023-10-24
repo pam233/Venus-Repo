@@ -46,28 +46,24 @@ def return_create_statement_from_dataframe(dataframe, schema_name, table_name):
 
 
 
-# def insert_statement_from_dataframe(dataframe, schema_name, table_name):
-#     columns=','.join(dataframe.columns)
-#     for index,row in dataframe.iterrows():
-#         values_list=[]
-#         for val in row.values:
-#             val_type=str(type(val))
-#             if val_type==HandledType.TIMESTAMP.value:
-#                 values_list.append(str(val))
-#             elif val_type==HandledType.STRING.value:
-#                 values_list.append(f"'{val}")
-#             elif val_type==HandledType.LIST.value:
-#                 val_item=';'.join(val)
-#                 values_list.append(f"'{val_item}")
-#             else:
-#                 values_list.append(str(val))
-#         values=', '.join(values_list)
-#         insert_statement=f"INSERT INTO {schema_name}.{table_name} ({columns}) VALUES ({values});" 
-#         return insert_statement
 
-def insert_statement_from_dataframe(dataframe, schema_name, table_name):
-    columns = ', '.join(dataframe.columns)
-    rows = []
+
+
+
+def execute_insert_queries(conn, insert_queries):
+    cursor = conn.cursor()
+    try:
+        for query in insert_queries:
+            cursor.execute(query)
+        conn.commit()
+    except (Exception, psycopg2.Error) as error:
+        conn.rollback()
+        print(f"Error executing query: {error}")
+    finally:
+        cursor.close()
+
+def insert_statements_from_dataframe(dataframe, schema_name, table_name):
+    insert_statements = []
 
     for _, row in dataframe.iterrows():
         formatted_row = []
@@ -75,7 +71,8 @@ def insert_statement_from_dataframe(dataframe, schema_name, table_name):
         for value in row:
             if pd.notna(value):
                 if isinstance(value, str):
-                    formatted_row.append(f"'{value}'")
+                    formatted_value = value.replace("'", "''")
+                    formatted_row.append(f"'{formatted_value}'")
                 elif isinstance(value, pd.Timestamp):
                     formatted_row.append(f"'{value}'")
                 else:
@@ -83,14 +80,11 @@ def insert_statement_from_dataframe(dataframe, schema_name, table_name):
             else:
                 formatted_row.append('NULL')
 
-        rows.append(', '.join(formatted_row))
+        columns = ', '.join(dataframe.columns)
+        values = ', '.join(formatted_row)
+        insert_statement = f"INSERT INTO {schema_name}.{table_name} ({columns}) VALUES ({values});"
+        insert_statements.append(insert_statement)
 
+    return insert_statements
 
-    values = ', '.join(rows).replace("'", "' '")
-
-    insert_statement = f"INSERT INTO {schema_name}.{table_name} ({columns}) VALUES ({values});"
-
-    return insert_statement
-
-
-
+# Use the function to get insert queries for each row in the dataframe
