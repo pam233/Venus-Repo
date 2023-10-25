@@ -2,6 +2,7 @@ import requests
 import pandas as pd
 import json
 from db_handler import create_connection
+from lookups import FileType
 
 
 def load_data_into_dataframe(file_path, file_type, db_connection=None):
@@ -29,7 +30,7 @@ def load_data_into_dataframe(file_path, file_type, db_connection=None):
             data = json.load(file)
         return pd.DataFrame(data)
 
-    elif file_type == 'csv':
+    elif file_type ==FileType.CSV:
         return pd.read_csv(file_path)
 
     elif file_type == 'excel':
