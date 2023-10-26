@@ -45,23 +45,6 @@ def return_create_statement_from_dataframe(dataframe, schema_name, table_name):
     return create_table_statement
 
 
-
-
-
-
-
-def execute_insert_queries(conn, insert_queries):
-    cursor = conn.cursor()
-    try:
-        for query in insert_queries:
-            cursor.execute(query)
-        conn.commit()
-    except (Exception, psycopg2.Error) as error:
-        conn.rollback()
-        print(f"Error executing query: {error}")
-    finally:
-        cursor.close()
-
 def insert_statements_from_dataframe(dataframe, schema_name, table_name):
     insert_statements = []
 
