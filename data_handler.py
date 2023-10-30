@@ -1,6 +1,7 @@
 import pandas as pd
 import psycopg2
 from lookups import FileType,ErrorHandling,HandledType
+from db_handler import create_connection,execute_query,close_connection
 import re
 
 def extract_data_into_df(data_type,data_path):
@@ -71,6 +72,35 @@ def insert_statements_from_dataframe(dataframe, schema_name, table_name):
     return insert_statements
 
 
+def insert_data_in_batches(data, schema_name, table_name, batch_size):
+    conn = create_connection()
+    
+    if conn is None:
+        return
+    
+    try:
+        with conn.cursor() as cursor:
+            # Create the ETL watermark value
+            etl_watermark = "CURRENT_TIMESTAMP"  # You can use the current timestamp for the watermark
+            
+            # Split the data into batches
+            for i in range(0, len(data), batch_size):
+                batch = data[i:i + batch_size]
+                
+                # Create insert statements for the current batch, including the ETL watermark
+                insert_statements = insert_statements_from_dataframe(batch, schema_name, table_name, etl_watermark)
+                
+                for statement in insert_statements:
+                    execute_query(conn, statement)
+        
+        conn.commit()
+        print(f"Data inserted successfully in batches with ETL watermark.")
+    
+    except (Exception, psycopg2.Error) as error:
+        print(f"Error inserting data in batches: {error}")
+    finally:
+        if conn:
+            close_connection(conn)
 
 
 # Use the function to get insert queries for each row in the dataframe
