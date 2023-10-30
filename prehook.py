@@ -5,11 +5,8 @@ import db_handler
 
 def return_csv_list():
     csv_list = []
-    csv_list.append('')
-    csv_list.append('')
-    csv_list.append('')
-    csv_list.append('')
-    csv_list.append('')
+    csv_list.append("C:\dataproject\songs_dataset.csv")
+    # csv_list.append("C:\dataproject\users_dataset.csv")
     return csv_list
 
 
