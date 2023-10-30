@@ -1,7 +1,7 @@
 import pandas as pd
 import psycopg2
 from lookups import FileType, ErrorHandling, HandledType
-import db_handler
+from db_handler import create_connection,close_connection,execute_query
 from db_handler import execute_query
 import os
 
@@ -89,4 +89,56 @@ def insert_statements_from_dataframe(dataframe, schema_name, table_name):
     return insert_statements
 
 
-# Use the function to get insert queries for each row in the dataframe
+def create_etl_watermark_table(conn, sql_file_name):
+    try:
+        with conn.cursor() as cursor:
+            with open(sql_file_name, 'r') as sql_file:
+                create_table_query = sql_file.read()
+            
+            execute_query(conn, create_table_query)
+            
+            print("ETL watermark table created successfully.")
+    except (Exception, psycopg2.Error) as error:
+        print(f"Error creating ETL watermark table: {error}")
+
+def record_etl_watermark(conn, schema_name, watermark_table_name):
+    try:
+        with conn.cursor() as cursor:
+            etl_watermark_timestamp = time.strftime('%Y-%m-%d %H:%M:%S')
+            insert_query = f"INSERT INTO {schema_name}.{watermark_table_name} (etl_last_execution_time) VALUES ('{etl_watermark_timestamp}');"
+            execute_query(conn, insert_query)
+            print("ETL watermark timestamp recorded.")
+    except (Exception, psycopg2.Error) as error:
+        print(f"Error recording ETL watermark timestamp: {error}")
+
+def insert_data_in_batches(data, schema_name, table_name, batch_size, watermark_table_name):
+    if data is None:
+        print("Error: Data is None.")
+        return
+    
+    conn = create_connection()
+    
+    if conn is None:
+        return
+    
+    try:
+        with conn.cursor() as cursor:
+            for i in range(0, len(data), batch_size):
+                batch = data[i:i + batch_size]
+                insert_statements = insert_statements_from_dataframe(batch, schema_name, table_name)
+                
+                with conn:
+                    with conn.cursor() as cursor:
+                        for statement in insert_statements:
+                            execute_query(conn, statement)
+                    
+                    # After inserting the batch, record the ETL watermark timestamp
+                    record_etl_watermark(conn, schema_name, watermark_table_name)
+        
+        conn.commit()
+        print("Data inserted successfully in batches.")
+    except (Exception, psycopg2.Error) as error:
+        print(f"Error inserting data in batches: {error}")
+    finally:
+        if conn:
+            conn.close()
