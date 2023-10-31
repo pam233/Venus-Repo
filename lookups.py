@@ -23,3 +23,7 @@ class HandledType(Enum):
   FLOAT ="<class 'float'>"
   LIST="<class 'list'>"
    
+class DBData(Enum):
+    SCHEMA = 'music_schema'
+    SOURCE_KAGGLE = 'kaggle'
+    

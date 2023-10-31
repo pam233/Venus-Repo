@@ -2,7 +2,7 @@ import data_handler
 import lookups
 import db_handler
 
-
+# try to load them in google drive and use a common link between the team.
 def return_csv_list():
     csv_list = []
     csv_list.append('C:\\dataproject\\songs_dataset.csv')
@@ -18,11 +18,11 @@ def execute_prehook_sql_statements(db_session):
         db_handler.execute_query(db_session, file_content)
 
 
-def create_staging_tables(csv_list, staging_table_name):
-    schema_name = 'musicschema'
-
+def create_staging_tables(csv_list, staging_source_name, staging_schema_name, staging_table_name):
+    # recommendation: using an underscore statement like: music_schema.
     for csv_item in csv_list:
-        table_name = f"stg_kaggle_{staging_table_name}"
+        # try to dynamically load the source.
+        table_name = f"stg_k{staging_source_name}_{staging_table_name}"
         # Ensure that the csv_item contains at least one '/'
         if '/' in csv_item:
             staging_table_name = csv_item.split(
@@ -34,4 +34,8 @@ def create_staging_tables(csv_list, staging_table_name):
         stg_df = data_handler.extract_data_into_df(
             lookups.FileType.CSV, csv_item)
         create_stmnt = data_handler.return_create_statement_from_dataframe(
-            stg_df, schema_name, table_name)
+            stg_df, {staging_schema_name}, table_name)
+        
+def execute():
+    pass
+    

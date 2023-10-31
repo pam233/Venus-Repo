@@ -60,10 +60,6 @@ def execute_query(conn, query):
         if cursor:
             cursor.close()
 
-
-
-
-
 def close_connection(conn):
     if conn is not None:
         conn.close()

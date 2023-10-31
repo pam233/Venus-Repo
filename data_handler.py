@@ -1,10 +1,11 @@
 import pandas as pd
 import psycopg2
+# remove any imported object that is not being used.
 from lookups import FileType, ErrorHandling, HandledType
+# use 1 import of db_handler not multiple
 from db_handler import create_connection,close_connection,execute_query
-from db_handler import execute_query
 import os
-
+from datetime import time
 
 def extract_data_into_df(data_type, data_path):
     data_frame = None
@@ -43,6 +44,8 @@ def return_create_statement_from_dataframe(dataframe, schema_name, table_name):
 
     create_table_statement = "CREATE TABLE IF NOT EXISTS {schema_name}.{table_name} (\n".format(
         schema_name=schema_name, table_name=table_name)
+    # ID SERIAL PRIMARY KEY (this is optional)
+    # if you have an ID in the table, you don't need this.
     create_table_statement += 'ID SERIAL PRIMARY KEY, \n'
     create_table_statement += ',\n'.join(fields)
     create_table_statement += "\n);"
@@ -59,7 +62,7 @@ def execute_prehook_statements(db_session, directory):
 
                 with open(file_path, "r") as f:
                     query = f.read()
-                db_handler.execute_query(db_session, query)
+                execute_query(db_session, query)
                 db_session.commit()
 
 
@@ -96,9 +99,10 @@ def create_etl_watermark_table(conn, sql_file_name):
                 create_table_query = sql_file.read()
             
             execute_query(conn, create_table_query)
-            
+            # don't print -- log them in file.
             print("ETL watermark table created successfully.")
     except (Exception, psycopg2.Error) as error:
+        # don't print -- log them in file.
         print(f"Error creating ETL watermark table: {error}")
 
 def record_etl_watermark(conn, schema_name, watermark_table_name):
@@ -107,12 +111,17 @@ def record_etl_watermark(conn, schema_name, watermark_table_name):
             etl_watermark_timestamp = time.strftime('%Y-%m-%d %H:%M:%S')
             insert_query = f"INSERT INTO {schema_name}.{watermark_table_name} (etl_last_execution_time) VALUES ('{etl_watermark_timestamp}');"
             execute_query(conn, insert_query)
+            # don't print -- log them in file.
             print("ETL watermark timestamp recorded.")
     except (Exception, psycopg2.Error) as error:
+        # don't print -- log them in file.
         print(f"Error recording ETL watermark timestamp: {error}")
 
+
+# create the insert statment(s) and use execute query and not have them both in the same function.
 def insert_data_in_batches(data, schema_name, table_name, batch_size, watermark_table_name):
     if data is None:
+        # don't print -- log them in file.
         print("Error: Data is None.")
         return
     
