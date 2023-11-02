@@ -32,14 +32,13 @@ def explore_data(data):
 #     new_column_name = f"new_column{column}"
 #     dataframe[new_column_name] = ''
 #     return dataframe
-    
 
-def remove_special_characters(dataframe):
-  regex_pattern = '[@_!#$%^*()<>?/\|}{~:-]'
-  dataframe['new_track_name'] = dataframe['track_name'].apply(lambda x: re.sub(regex_pattern, '', str(x)) if pd.notna(x) else x)
-  return dataframe
-            
-        
+
+def remove_special_characters(dataframe, column):
+    regex_pattern = '[@_!#$%^*()<>?/\\|}{~:-]'
+    dataframe['new_' + column] = dataframe[column].apply(
+        lambda x: re.sub(regex_pattern, '', str(x)) if pd.notna(x) else x)
+    return dataframe
 
 
 def preprocess_data(data):
