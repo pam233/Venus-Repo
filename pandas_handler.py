@@ -35,9 +35,10 @@ def explore_data(data):
 
 
 def remove_special_characters(dataframe, column):
-    regex_pattern = '[@_!#$%^*()<>?/\\|}{~:-]'
-    dataframe['new_' + column] = dataframe[column].apply(
-        lambda x: re.sub(regex_pattern, '', str(x)) if pd.notna(x) else x)
+    regex_pattern = r'[@_!#$%^&*()<>?/\|}{~:]'
+    dataframe[column] = dataframe[column].apply(
+        lambda x: re.sub(regex_pattern, '', str(x)) if pd.notna(x) else x
+    )
     return dataframe
 
 
