@@ -33,13 +33,22 @@ def explore_data(data):
 #     dataframe[new_column_name] = ''
 #     return dataframe
 
+# def remove_special_characters(dataframe, column):
+#     regex_pattern = r'[@_!#$%^&*()<>?/\|}{~:]Ã¶©¼‰ã‚¹ãƒ‘ã‚²ãƒƒãƒ†ã‚£ãƒ¼'
+#     dataframe[column] = dataframe[column].apply(
+#         lambda x: re.sub(regex_pattern, ' ', str(x)) if pd.notna(x) else x
+#     )
+#     return dataframe
 
 def remove_special_characters(dataframe, column):
-    regex_pattern = r'[@_!#$%^&*()<>?/\|}{~:]'
-    dataframe[column] = dataframe[column].apply(
-        lambda x: re.sub(regex_pattern, '', str(x)) if pd.notna(x) else x
-    )
-    return dataframe
+    regex_pattern = r'[@_!#$%^&*()<>?/\|}{~:]Ã¶©¼‰ã‚¹ãƒ‘ã‚²ãƒƒãƒ†ã‚£ãƒ¼'
+    rows_to_remove = []
+
+    for index, row in df.iterrows():
+        if any(char in regex_pattern for char in row['text_column']):
+            rows_to_remove.append(index)
+
+    df = df.drop(rows_to_remove)
 
 
 def preprocess_data(data):
