@@ -78,6 +78,7 @@ def create_staging_tables(csv_list, staging_source_name, staging_schema_name, st
 def execute():
     pass
     
+
 def create_dimension_tables(stg_users_dataframe,stg_songs_dataframe):
     dim_users_data = stg_users_dataframe[["age", "gender", "fav_music_genre", "music_time_slot", "music_lis_frequency", "music_satisfaction"]]
     dim_songs_data = stg_songs_dataframe[["track_id", "track_name", "track_artist", "playlist_genre"]]
