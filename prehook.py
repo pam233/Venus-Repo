@@ -1,6 +1,10 @@
 import data_handler
 import lookups
 import db_handler
+import os
+import googleapiclient
+import google.oauth2
+
 
 # try to load them in google drive and use a common link between the team.
 def return_csv_list():
@@ -8,6 +12,44 @@ def return_csv_list():
     csv_list.append('C:\\dataproject\\songs_dataset.csv')
     csv_list.append('')
     return csv_list
+
+# def read_csv_files():
+#     # Replace with the path to your JSON key file.
+#       KEY_FILE = 'path/to/your/credentials.json'
+#       SCOPES = ['https://www.googleapis.com/auth/drive.readonly']
+
+# # Create a service client
+#       creds = None
+#       creds = service_account.Credentials.from_service_account_file(KEY_FILE, scopes=SCOPES)
+
+# # Build the Google Drive API service
+#       drive_service = build('drive', 'v3', credentials=creds)
+
+# # Replace with the file IDs of your CSV files
+#       file_id_1 = 'your_csv_file_id_1'
+#       file_id_2 = 'your_csv_file_id_2'
+
+# # Download the CSV files
+#       file_path_1 = 'local_path_to_save_csv1.csv'
+#       file_path_2 = 'local_path_to_save_csv2.csv'
+
+#       request = drive_service.files().export_media(fileId=file_id_1, mimeType='text/csv')
+#       fh = open(file_path_1, 'wb')
+#       downloader = MediaIoBaseDownload(fh, request)
+#       done = False
+# while done is False:
+#     status, done = downloader.next_chunk()
+#     print(f"Download {int(status.progress() * 100)}%")
+
+# request = drive_service.files().export_media(fileId=file_id_2, mimeType='text/csv')
+# fh = open(file_path_2, 'wb')
+# downloader = MediaIoBaseDownload(fh, request)
+# done = False
+# while done is False:
+#     status, done = downloader.next_chunk()
+#     print(f"Download {int(status.progress() * 100)}%")
+
+
 
 
 def execute_prehook_sql_statements(db_session):
