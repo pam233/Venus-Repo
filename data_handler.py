@@ -6,6 +6,8 @@ from lookups import FileType, ErrorHandling, HandledType
 from db_handler import create_connection,close_connection,execute_query
 import os
 from datetime import time
+import psycopg2
+import json
 
 def extract_data_into_df(data_type, data_path):
     data_frame = None
@@ -19,9 +21,9 @@ def extract_data_into_df(data_type, data_path):
     except Exception as e:
         suffix = ErrorHandling.extract_data_info_df.value
         prefix = str(e)
-        # log_message(suffix,prefix)
-    finally:
-        return data_frame
+        # log_message(suffix, prefix)
+    return data_frame
+
 
 
 def list_all_files(file_directory):
@@ -51,6 +53,37 @@ def return_create_statement_from_dataframe(dataframe, schema_name, table_name):
     create_table_statement += "\n);"
     return create_table_statement
 
+def execute_sql_script_from_config(sql_script_path, config_path='config.json'):
+    try:
+        # Load database connection details from config.json
+        with open(config_path) as config_file:
+            config_data = json.load(config_file)
+
+        conn = psycopg2.connect(
+            dbname=config_data['database'],
+            user=config_data['user'],
+            password=config_data['password'],
+            host=config_data['host'],
+            port=config_data['port']
+        )
+
+        # Create a cursor object
+        cursor = conn.cursor()
+
+        # Read the SQL file
+        with open(sql_script_path, 'r') as sql_file:
+            sql_script = sql_file.read()
+
+        # Execute the SQL script
+        cursor.execute(sql_script)
+        conn.commit()
+        conn.close()
+
+        print("SQL script executed successfully.")
+    except (Exception, psycopg2.Error) as error:
+        print(f"Error executing SQL script: {error}")
+
+
 
 def execute_prehook_statements(db_session, directory):
     for root, dirs, files in os.walk(directory):
@@ -64,6 +97,8 @@ def execute_prehook_statements(db_session, directory):
                     query = f.read()
                 execute_query(db_session, query)
                 db_session.commit()
+
+
 
 
 def insert_statements_from_dataframe(dataframe, schema_name, table_name):
@@ -117,8 +152,6 @@ def record_etl_watermark(conn, schema_name, watermark_table_name):
         # don't print -- log them in file.
         print(f"Error recording ETL watermark timestamp: {error}")
 
-
-# create the insert statment(s) and use execute query and not have them both in the same function.
 def insert_data_in_batches(data, schema_name, table_name, batch_size, watermark_table_name):
     if data is None:
         # don't print -- log them in file.

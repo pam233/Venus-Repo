@@ -1,17 +1,30 @@
 import data_handler
 import lookups
 import db_handler
-
+<<<<<<< HEAD
+import os
+#import googleapiclient
+#import google.oauth2
+=======
+<<<<<<< HEAD
+>>>>>>> parent of 04df7ff (commit)
 from data_handler import return_create_statement_from_dataframe
 import pandas as pd
 from db_handler import create_connection,execute_query, close_connection
 from data_handler import insert_statements_from_dataframe,extract_data_into_df,create_etl_watermark_table,insert_data_in_batches
 from lookups import FileType
+<<<<<<< HEAD
+db_session = create_connection()
+=======
 
+db_session = create_connection()
+=======
 import os
 import googleapiclient
 import google.oauth2
+>>>>>>> parent of 04df7ff (commit)
 
+>>>>>>> pam
 
 # try to load them in google drive and use a common link between the team.
 def return_csv_list():
@@ -67,7 +80,41 @@ def execute_prehook_sql_statements(db_session):
         db_handler.execute_query(db_session, file_content)
 
 
-    
+def create_staging_table():
+    stg_users_dataframe = pd.DataFrame({
+<<<<<<< HEAD
+        "age": ['25-30', '30-50', '35-40'],
+=======
+        "age": [25, 30, 35],
+>>>>>>> parent of 04df7ff (commit)
+        "gender": ['Male', 'Female', 'Male'],
+        "fav_music_genre": ['Pop', 'Rock', 'Hip-Hop'],
+        "music_time_slot": ['Morning', 'Evening', 'Afternoon'],
+        "music_lis_frequency": ['Daily', 'Weekly', 'Monthly'],
+        "music_satisfaction": ['High', 'Medium', 'Low']
+    })
+
+    stg_songs_dataframe = pd.DataFrame({
+        "track_id": [1, 2, 3],
+        "track_name": ["Song1", "Song2", "Song3"],
+        "track_artist": ["Artist1", "Artist2", "Artist3"],
+        "track_popularity": [80, 90, 70],
+        "track_album_id": [101, 102, 103],
+        "track_album_name": ["Album1", "Album2", "Album3"],
+        "track_album_release_date": ["2022-01-01", "2022-02-01", "2022-03-01"],
+        "playlist_name": ["Playlist1", "Playlist2", "Playlist3"],
+        "playlist_id": [201, 202, 203],
+        "playlist_genre": ["Genre1", "Genre2", "Genre3"],
+        "energy": [0.8, 0.7, 0.6],
+        "key": [1, 2, 3],
+        "loudness": [-5.0, -6.0, -7.0],
+        "mode": [0, 1, 0],
+        "speechiness": [0.1, 0.2, 0.3],
+        "valence": [0.7, 0.6, 0.5],
+        "tempo": [120, 130, 140],
+        "duration_ms": [240000, 250000, 260000]
+    })
+
 
 def create_staging_tables(csv_list, staging_source_name, staging_schema_name, staging_table_name):
     # recommendation: using an underscore statement like: music_schema.
@@ -121,8 +168,8 @@ def create_fact_tables(stg_users_dataframe,stg_songs_dataframe):
     fact_song_genre_data["total_songs"] = 1
     fact_song_genre_data = fact_song_genre_data.groupby(["track_name", "track_artist", "playlist_genre"]).sum().reset_index()
 
-    fact_user_genre_table_name = "Fact_user_genre"
-    fact_song_genre_table_name = "Fact_song_genre"
+    fact_user_genre_table_name = "fct_user_genre"
+    fact_song_genre_table_name = "fct_song_genre"
 
     execute_query(conn=db_session, query=return_create_statement_from_dataframe(
         fact_user_genre_data, schema, fact_user_genre_table_name))
