@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS musicschema.fct_average_listen_time_per_genre
+CREATE TABLE IF NOT EXISTS musicschema.fct_age_distribution_per_genre
 (
     id SERIAL PRIMARY KEY,
     playlist_genre TEXT,

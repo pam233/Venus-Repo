@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS {target_schema}.agg_user
+CREATE TABLE IF NOT EXISTS muscischema.agg_user
 (
     id PRIMARY KEY NOT NULL,
     user_id INTEGER,
@@ -14,16 +14,16 @@ WHERE fct_user_genre.user_id NOT IN
 (
     SELECT 
         user_id
-    FROM {target_schema}.agg_user
+    FROM musicschema.agg_user
 );
 
-UPDATE {target_schema}.agg_user
+UPDATE musicshema.agg_user
 SET total_genre = subquery.total_genre
 FROM
 (
     SELECT 
         user_id,
         COUNT(DISTINCT genre_id) AS total_genre
-    FROM {target_schema}.fct_user_genre
+    FROM musicschema.fct_user_genre
 ) subquery
 WHERE agg_user.user_id = subquery.user_id
