@@ -1,30 +1,26 @@
 import data_handler
 import lookups
 import db_handler
-<<<<<<< HEAD
+
 import os
 #import googleapiclient
 #import google.oauth2
-=======
-<<<<<<< HEAD
->>>>>>> parent of 04df7ff (commit)
+
 from data_handler import return_create_statement_from_dataframe
 import pandas as pd
 from db_handler import create_connection,execute_query, close_connection
 from data_handler import insert_statements_from_dataframe,extract_data_into_df,create_etl_watermark_table,insert_data_in_batches
 from lookups import FileType
-<<<<<<< HEAD
-db_session = create_connection()
-=======
 
 db_session = create_connection()
-=======
+
+
+db_session = create_connection()
+
 import os
 import googleapiclient
 import google.oauth2
->>>>>>> parent of 04df7ff (commit)
 
->>>>>>> pam
 
 # try to load them in google drive and use a common link between the team.
 def return_csv_list():
@@ -82,11 +78,11 @@ def execute_prehook_sql_statements(db_session):
 
 def create_staging_table():
     stg_users_dataframe = pd.DataFrame({
-<<<<<<< HEAD
+
         "age": ['25-30', '30-50', '35-40'],
-=======
+
         "age": [25, 30, 35],
->>>>>>> parent of 04df7ff (commit)
+
         "gender": ['Male', 'Female', 'Male'],
         "fav_music_genre": ['Pop', 'Rock', 'Hip-Hop'],
         "music_time_slot": ['Morning', 'Evening', 'Afternoon'],
