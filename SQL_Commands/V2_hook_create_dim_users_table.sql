@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS musicschema.dim_user
+CREATE TABLE IF NOT EXISTS musicschema.dim_users
 (
     id int PRIMARY KEY,
     age TEXT,
@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS musicschema.dim_user
     music_satisfaction TEXT
 );
 
-INSERT INTO musicschema.dim_user
+INSERT INTO musicschema.dim_users
 (id, age, gender, fav_music_genre, music_time_slot, music_lis_frequency, music_satisfaction)
 SELECT 
     id,

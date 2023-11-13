@@ -43,12 +43,8 @@ def execute_query(conn, query):
     try:
         cursor = conn.cursor()
         cursor.execute(query)
-        # result = cursor.fetchall()  # Fetch all results
         conn.commit()
-        #local_logger.set_log_level(logging.INFO)
         local_logger.log_message(LogLevels.DEBUG,'Query executed successfully: %s' % query)
-        # local_logger.log_message(LogLevels.INFO,'Query result: %s' % json.dumps(result, indent=2))  # Log the result
-        # return result  # Return the result for further processing if needed
     except (Exception, psycopg2.Error) as error:
         if cursor:
             conn.rollback()
