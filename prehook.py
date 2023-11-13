@@ -8,7 +8,6 @@ from db_handler import create_connection,execute_query, close_connection
 from data_handler import insert_statements_from_dataframe,extract_data_into_df,create_etl_watermark_table,insert_data_in_batches
 from lookups import FileType
 
-
 def return_excel_list():
     csv_list = []
     csv_list.append('C:\\dataproject\\songs_dataset.xlsx')
