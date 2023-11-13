@@ -99,7 +99,18 @@ def execute_prehook_statements(db_session, directory):
                 db_session.commit()
 
 
+def execute_hook_statements(db_session, directory):
+    for root, dirs, files in os.walk(directory):
+        for file in files:
+            if file.endswith(".sql") and "_hook" in file:
+                file_path = os.path.join(root, file)
+                query = None
+                print(file)
 
+                with open(file_path, "r") as f:
+                    query = f.read()
+                execute_query(db_session, query)
+                db_session.commit()
 
 def insert_statements_from_dataframe(dataframe, schema_name, table_name):
     insert_statements = []
