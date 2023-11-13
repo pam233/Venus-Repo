@@ -14,7 +14,7 @@ SELECT
     gm.genre_name_one AS genre_name,
     COUNT(s.track_id) AS number_of_songs
 FROM
-    musicschema.stg_kaggle_spotify_songs s
+    musicschema.stg_kaggle_spotify_tracks s
 JOIN
     musicschema.genre_mapping gm ON s.genre = gm.genre_name_one
 GROUP BY
@@ -28,7 +28,7 @@ SELECT
     gm.genre_name_one AS genre_name,
     COUNT(s.track_id) AS number_of_songs
 FROM
-    musicschema.stg_kaggle_spotify_songs s
+    musicschema.stg_kaggle_spotify_tracks s
 JOIN
     musicschema.genre_mapping gm ON s.genre = gm.genre_name_one
 GROUP BY
