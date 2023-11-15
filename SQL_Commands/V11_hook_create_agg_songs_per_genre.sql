@@ -16,7 +16,7 @@ SELECT
 FROM
     musicschema.stg_kaggle_spotify_tracks s
 JOIN
-    musicschema.genre_mapping gm ON s.genre = gm.genre_name_one
+    musicschema.genre_mapping gm ON s.playlist_genre = gm.genre_name_one
 GROUP BY
     gm.genre_id, gm.genre_name_one;
 
@@ -30,7 +30,7 @@ SELECT
 FROM
     musicschema.stg_kaggle_spotify_tracks s
 JOIN
-    musicschema.genre_mapping gm ON s.genre = gm.genre_name_one
+    musicschema.genre_mapping gm ON s.playlist_genre = gm.genre_name_one
 GROUP BY
     gm.genre_id, gm.genre_name_one
 ON CONFLICT (genre_id) DO UPDATE
