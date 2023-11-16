@@ -7,6 +7,7 @@ import pandas as pd
 from db_handler import create_connection,execute_query, close_connection
 from data_handler import insert_statements_from_dataframe,extract_data_into_df,create_etl_watermark_table,insert_data_in_batches
 from lookups import FileType
+from import_from_google_drive import download_and_convert_to_dataframe
 
 def return_excel_list():
     csv_list = []
@@ -19,12 +20,12 @@ def return_excel_list():
 def execute():
     db_session = create_connection()
     execute_prehook_statements(db_session, 'SQL_Commands')
-    # execute_sql_script_from_config('SQL_Commands/prehook_create_stg_kaggle_spotify_tracks.sql')
-    # execute_sql_script_from_config('SQL_Commands/prehook_create_stg_kaggle_spotify_users.sql')
-    df = pd.read_excel("C:\\dataproject\\users_dataset.xlsx")
-    df1 = pd.read_excel("C:\\dataproject\\songs_dataset.xlsx")
-    insert_statements1 = insert_statements_from_dataframe(df, 'musicschema', 'stg_kaggle_spotify_users')
-    insert_statements2 = insert_statements_from_dataframe(df1, 'musicschema', 'stg_kaggle_spotify_tracks')
+    tracks_file_id = '1EDDNjMY23piFi8zCGaySGvlRcbUUqhKc'
+    users_file_id = '157Ka9S8JMwEjYdvxzLTwMQzv1TH_aUvM'
+    df_tracks = download_and_convert_to_dataframe(tracks_file_id)
+    df_users = download_and_convert_to_dataframe(users_file_id)
+    insert_statements1 = insert_statements_from_dataframe(df_users, 'musicschema', 'stg_kaggle_spotify_users')
+    insert_statements2 = insert_statements_from_dataframe(df_tracks, 'musicschema', 'stg_kaggle_spotify_tracks')
 
     with db_session.cursor() as cursor:
         for statement in insert_statements1:
