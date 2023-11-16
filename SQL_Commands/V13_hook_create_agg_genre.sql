@@ -19,8 +19,8 @@ SELECT
     AVG(CAST(LEFT(age, POSITION('-' IN age) - 1) AS INT)) AS average_age
 FROM musicschema.stg_kaggle_spotify_users
 GROUP BY fav_music_genre
-ON CONFLICT(id) 
-DO UPDATE SET
+ON CONFLICT(id) DO UPDATE 
+SET
     total_users = excluded.total_users,
     male_users = excluded.male_users,
     female_users = excluded.female_users,

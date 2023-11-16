@@ -15,7 +15,7 @@ SELECT
     gender,
     fav_music_genre
 FROM musicschema.stg_kaggle_spotify_users
-ON CONFLICT ON CONSTRAINT unique_user_genre_constraint
+ON CONFLICT (user_id)
 DO UPDATE SET 
     age = EXCLUDED.age,
     gender = EXCLUDED.gender;

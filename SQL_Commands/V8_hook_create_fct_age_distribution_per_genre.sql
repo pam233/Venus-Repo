@@ -12,3 +12,8 @@ FROM
     musicschema.stg_kaggle_spotify_tracks
 GROUP BY
     playlist_genre;
+ON CONFLICT (id,playlist_genre) 
+DO UPDATE SET
+    id=excluded.id
+    playlist_genre=excluded.playlist_genre
+    
