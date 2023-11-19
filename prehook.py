@@ -5,17 +5,10 @@ import os
 from data_handler import return_create_statement_from_dataframe,execute_prehook_statements,execute_sql_script_from_config
 import pandas as pd
 from db_handler import create_connection,execute_query, close_connection
-from data_handler import insert_statements_from_dataframe,extract_data_into_df,create_etl_watermark_table,insert_data_in_batches
+from data_handler import insert_statements_from_dataframe,extract_data_into_df,create_etl_watermark_table,insert_data_in_batches, record_etl_watermark
+
 from lookups import FileType
 from import_from_google_drive import download_and_convert_to_dataframe
-
-def return_excel_list():
-    csv_list = []
-    csv_list.append('C:\\dataproject\\songs_dataset.xlsx')
-    csv_list.append('C:\\dataproject\\users_dataset.xlsx')
-    csv_list.append('')
-    return csv_list
-
 
 def execute():
     db_session = create_connection()
