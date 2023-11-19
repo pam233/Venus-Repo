@@ -113,6 +113,8 @@ def execute_hook_statements(db_session, directory):
                 db_session.commit()
 
 def insert_statements_from_dataframe(dataframe, schema_name, table_name):
+    conn = create_connection()
+
     insert_statements = []
 
     for _, row in dataframe.iterrows():
@@ -135,6 +137,8 @@ def insert_statements_from_dataframe(dataframe, schema_name, table_name):
         insert_statement = f"INSERT INTO {schema_name}.{table_name} ({columns}) VALUES ({values});"
         insert_statements.append(insert_statement)
 
+        record_etl_watermark(conn, schema_name, "etl_watermark", table_name)
+
     return insert_statements
 
 
@@ -151,17 +155,20 @@ def create_etl_watermark_table(conn, sql_file_name):
         # don't print -- log them in file.
         print(f"Error creating ETL watermark table: {error}")
 
-def record_etl_watermark(conn, schema_name, watermark_table_name):
+def record_etl_watermark(conn, schema_name, watermark_table_name, table_name):
     try:
         with conn.cursor() as cursor:
             etl_watermark_timestamp = time.strftime('%Y-%m-%d %H:%M:%S')
-            insert_query = f"INSERT INTO {schema_name}.{watermark_table_name} (etl_last_execution_time) VALUES ('{etl_watermark_timestamp}');"
+            insert_query = f"INSERT INTO {schema_name}.{watermark_table_name} (table_name, last_update_timestamp) " \
+                           f"VALUES ('{table_name}', '{etl_watermark_timestamp}') " \
+                           f"ON CONFLICT (table_name) DO UPDATE SET last_update_timestamp = '{etl_watermark_timestamp}';"
             execute_query(conn, insert_query)
-            # don't print -- log them in file.
-            print("ETL watermark timestamp recorded.")
+
+            print(f"ETL watermark timestamp recorded for table: {table_name}")
     except (Exception, psycopg2.Error) as error:
-        # don't print -- log them in file.
-        print(f"Error recording ETL watermark timestamp: {error}")
+
+        print(f"Error recording ETL watermark timestamp for table {table_name}: {error}")
+
 
 def insert_data_in_batches(data, schema_name, table_name, batch_size, watermark_table_name):
     if data is None:
@@ -186,7 +193,7 @@ def insert_data_in_batches(data, schema_name, table_name, batch_size, watermark_
                             execute_query(conn, statement)
                     
                     # After inserting the batch, record the ETL watermark timestamp
-                    record_etl_watermark(conn, schema_name, watermark_table_name)
+                    record_etl_watermark(conn, schema_name, watermark_table_name,table_name)
         
         conn.commit()
         print("Data inserted successfully in batches.")
