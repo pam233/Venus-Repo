@@ -9,14 +9,6 @@ from data_handler import insert_statements_from_dataframe,extract_data_into_df,c
 from lookups import FileType
 from import_from_google_drive import download_and_convert_to_dataframe
 
-def return_excel_list():
-    csv_list = []
-    csv_list.append('C:\\dataproject\\songs_dataset.xlsx')
-    csv_list.append('C:\\dataproject\\users_dataset.xlsx')
-    csv_list.append('')
-    return csv_list
-
-
 def execute():
     db_session = create_connection()
     execute_prehook_statements(db_session, 'SQL_Commands')
