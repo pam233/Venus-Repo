@@ -24,8 +24,8 @@ def execute():
     users_file_id = '157Ka9S8JMwEjYdvxzLTwMQzv1TH_aUvM'
     df_tracks = download_and_convert_to_dataframe(tracks_file_id)
     df_users = download_and_convert_to_dataframe(users_file_id)
-    insert_statements1 = insert_statements_from_dataframe(df_users, 'musicschema', 'stg_kaggle_spotify_users')
-    insert_statements2 = insert_statements_from_dataframe(df_tracks, 'musicschema', 'stg_kaggle_spotify_tracks')
+    insert_statements1 = insert_statements_from_dataframe(df_users.head(500), 'musicschema', 'stg_kaggle_spotify_users')
+    insert_statements2 = insert_statements_from_dataframe(df_tracks.head(500), 'musicschema', 'stg_kaggle_spotify_tracks')
 
     with db_session.cursor() as cursor:
         for statement in insert_statements1:
