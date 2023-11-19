@@ -9,12 +9,6 @@ from data_handler import insert_statements_from_dataframe,extract_data_into_df,c
 from lookups import FileType
 from import_from_google_drive import download_and_convert_to_dataframe
 
-def return_excel_list():
-    csv_list = []
-    csv_list.append('C:\\dataproject\\songs_dataset.xlsx')
-    csv_list.append('C:\\dataproject\\users_dataset.xlsx')
-    csv_list.append('')
-    return csv_list
 
 
 def execute():
@@ -25,7 +19,7 @@ def execute():
     df_tracks = download_and_convert_to_dataframe(tracks_file_id)
     df_users = download_and_convert_to_dataframe(users_file_id)
     insert_statements1 = insert_statements_from_dataframe(df_users.head(500), 'musicschema', 'stg_kaggle_spotify_users')
-    insert_statements2 = insert_statements_from_dataframe(df_tracks.head(500), 'musicschema', 'stg_kaggle_spotify_tracks')
+    insert_statements2 = insert_statements_from_dataframe(df_tracks.head(200), 'musicschema', 'stg_kaggle_spotify_tracks')
 
     with db_session.cursor() as cursor:
         for statement in insert_statements1:
