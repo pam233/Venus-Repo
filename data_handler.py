@@ -85,7 +85,6 @@ def execute_sql_script_from_config(sql_script_path, config_path='config.json'):
         print(f"Error executing SQL script: {error}")
 
 
-
 def execute_prehook_statements(db_session, directory):
     for root, dirs, files in os.walk(directory):
         for file in files:
@@ -155,6 +154,7 @@ def create_etl_watermark_table(conn, sql_file_name):
         # don't print -- log them in file.
         print(f"Error creating ETL watermark table: {error}")
 
+
 def record_etl_watermark(conn, schema_name, watermark_table_name, table_name):
     try:
         with conn.cursor() as cursor:
@@ -162,11 +162,21 @@ def record_etl_watermark(conn, schema_name, watermark_table_name, table_name):
             insert_query = f"INSERT INTO {schema_name}.{watermark_table_name} (table_name, last_update_timestamp) " \
                            f"VALUES ('{table_name}', TIMESTAMP '{etl_watermark_timestamp}') " \
                            f"ON CONFLICT (table_name) DO UPDATE SET last_update_timestamp = TIMESTAMP '{etl_watermark_timestamp}';"
-            #execute_query(conn, insert_query)
-
+            execute_query(conn, insert_query)
             print(f"ETL watermark timestamp recorded for table: {table_name}")
     except (Exception, psycopg2.Error) as error:
         print(f"Error recording ETL watermark timestamp for table {table_name}: {error}")
+
+def execute_query(conn, query):
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(query)
+            conn.commit()
+            print("SQL script executed successfully.")
+    except (Exception, psycopg2.Error) as error:
+        print(f"Error executing SQL script: {error}")
+
+
 
 
 def insert_data_in_batches(data, schema_name, table_name, batch_size, watermark_table_name):
