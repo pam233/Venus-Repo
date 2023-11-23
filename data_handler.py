@@ -10,6 +10,13 @@ import psycopg2
 import json
 from datetime import datetime
 
+
+#new function
+def return_query_as_dataframe(db_session, query):
+    df = pd.read_sql_query(query, db_session)
+    return df
+
+
 def extract_data_into_df(data_type, data_path):
     data_frame = None
     try:
