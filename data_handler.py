@@ -98,6 +98,18 @@ def execute_prehook_statements(db_session, directory):
                 execute_query(db_session, query)
                 db_session.commit()
 
+def execute_posthook_statements(db_session, directory):
+    for root, dirs, files in os.walk(directory):
+        for file in files:
+            if file.endswith(".sql") and "_posthook" in file:
+                file_path = os.path.join(root, file)
+                query = None
+                print(file)
+
+                with open(file_path, "r") as f:
+                    query = f.read()
+                execute_query(db_session, query)
+                db_session.commit()
 
 def execute_hook_statements(db_session, directory):
     for root, dirs, files in os.walk(directory):
@@ -155,13 +167,28 @@ def create_etl_watermark_table(conn, sql_file_name):
         print(f"Error creating ETL watermark table: {error}")
 
 
+# def record_etl_watermark(conn, schema_name, watermark_table_name, table_name):
+#     try:
+#         with conn.cursor() as cursor:
+#             etl_watermark_timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+#             insert_query = f"INSERT INTO {schema_name}.{watermark_table_name} (table_name, last_update_timestamp) " \
+#                            f"VALUES ('{table_name}', TIMESTAMP '{etl_watermark_timestamp}') " \
+#                            f"ON CONFLICT (table_name) DO UPDATE SET last_update_timestamp = TIMESTAMP '{etl_watermark_timestamp}';"
+#             execute_query(conn, insert_query)
+#             print(f"ETL watermark timestamp recorded for table: {table_name}")
+#     except (Exception, psycopg2.Error) as error:
+#         print(f"Error recording ETL watermark timestamp for table {table_name}: {error}")
+
 def record_etl_watermark(conn, schema_name, watermark_table_name, table_name):
     try:
         with conn.cursor() as cursor:
             etl_watermark_timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            insert_query = f"INSERT INTO {schema_name}.{watermark_table_name} (table_name, last_update_timestamp) " \
-                           f"VALUES ('{table_name}', TIMESTAMP '{etl_watermark_timestamp}') " \
-                           f"ON CONFLICT (table_name) DO UPDATE SET last_update_timestamp = TIMESTAMP '{etl_watermark_timestamp}';"
+            insert_query = f"""
+                INSERT INTO {schema_name}.{watermark_table_name} (table_name, last_update_timestamp)
+                VALUES ('{table_name}', TO_TIMESTAMP('{etl_watermark_timestamp}', 'YYYY-MM-DD HH24:MI:SS'))
+                ON CONFLICT (table_name) DO UPDATE 
+                SET last_update_timestamp = TO_TIMESTAMP('{etl_watermark_timestamp}', 'YYYY-MM-DD HH24:MI:SS');
+            """
             execute_query(conn, insert_query)
             print(f"ETL watermark timestamp recorded for table: {table_name}")
     except (Exception, psycopg2.Error) as error:
