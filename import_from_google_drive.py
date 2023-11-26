@@ -17,10 +17,3 @@ def download_and_convert_to_dataframe(file_id):
         print(response.text)
         return None
 
-# file_id = '1EDDNjMY23piFi8zCGaySGvlRcbUUqhKc'
-# df = download_and_convert_to_dataframe(file_id)
-
-# if df is not None:
-#     print(df)
-# else:
-#     print("Error: DataFrame not created.")

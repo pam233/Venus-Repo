@@ -28,17 +28,6 @@ def explore_data(data):
     print(data.describe())
     print(data.isnull().sum())
 
-# def remove_special_characters(dataframe, column):
-#     new_column_name = f"new_column{column}"
-#     dataframe[new_column_name] = ''
-#     return dataframe
-
-# def remove_special_characters(dataframe, column):
-#     regex_pattern = r'[@_!#$%^&*()<>?/\|}{~:]Ã¶©¼‰ã‚¹ãƒ‘ã‚²ãƒƒãƒ†ã‚£ãƒ¼'
-#     dataframe[column] = dataframe[column].apply(
-#         lambda x: re.sub(regex_pattern, ' ', str(x)) if pd.notna(x) else x
-#     )
-#     return dataframe
 
 def remove_special_characters(dataframe, column):
     regex_pattern = r'[@_!#$%^&*()<>?/\|}{~:]Ã¶©¼‰ã‚¹ãƒ‘ã‚²ãƒƒãƒ†ã‚£ãƒ¼'
@@ -57,9 +46,3 @@ def preprocess_data(data):
     data['release_date'] = pd.to_datetime(data['release_date'])
     return data
 
-
-# def main():
-#     file_path = 'Spotify_data(1).xlsx'
-#     music_data = load_data(file_path)
-
-#     explore_data(music_data)
