@@ -13,6 +13,7 @@ from etl_handler import update_etl_watermark,return_etl_watermark,insert_initial
 def execute():
    
     db_session = create_connection()
+    execute_sql_script_from_config('SQL_Commands/V0_prehook_Create_Schema.sql','config.json')
     execute_sql_script_from_config('SQL_Commands/V4_prehook_Create_ETL_watermark_table.sql','config.json')
  
     last_inserted_track_id = return_etl_watermark(db_session, 'stg_kaggle_spotify_tracks')
