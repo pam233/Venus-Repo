@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS musicschema.fct_average_listen_time_per_genre
     playlist_genre TEXT,
     average_listen_time NUMERIC
 );
+
 INSERT INTO musicschema.fct_average_listen_time_per_genre (playlist_genre, average_listen_time)
 SELECT
     playlist_genre,
@@ -11,9 +12,4 @@ SELECT
 FROM
     musicschema.stg_kaggle_spotify_tracks
 GROUP BY
-    playlist_genre;
-ON CONFLICT (id) DO UPDATE
-SET 
-  id=excluded.id
-  playlist_genre=exclided.playlist_genre
-
+    playlist_genre

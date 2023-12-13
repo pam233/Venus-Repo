@@ -3,10 +3,8 @@ CREATE TABLE IF NOT EXISTS musicschema.fct_user_genre
     user_id INTEGER,
     age TEXT,
     gender TEXT,
-    fav_music_genre TEXT,
-    CONSTRAINT unique_user_genre_constraint UNIQUE (user_id, fav_music_genre)
+    fav_music_genre TEXT
 );
-
 INSERT INTO musicschema.fct_user_genre
     (user_id, age, gender, fav_music_genre)
 SELECT 

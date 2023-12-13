@@ -4,8 +4,8 @@ from lookups import LogLevels
 
 class Logger:
     def __init__(self, log_file=None):
-        self.log_file = log_file  # Store the log file name as an instance variable
-        self._log_level = logging.DEBUG  # Default log level is DEBUG
+        self.log_file = log_file  
+        self._log_level = logging.DEBUG  
         self._configure_logger()
 
     def _configure_logger(self):

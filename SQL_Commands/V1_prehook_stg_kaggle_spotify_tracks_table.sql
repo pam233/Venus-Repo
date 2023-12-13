@@ -17,3 +17,4 @@ CREATE TABLE IF NOT EXISTS musicschema.stg_kaggle_spotify_tracks(
     tempo INT,
     duration_ms INT
 );
+

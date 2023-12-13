@@ -1,10 +1,10 @@
+-- Create the table with a unique constraint on user_id
 CREATE TABLE IF NOT EXISTS musicschema.fct_user_genre
 (
-    user_id INTEGER,
+    user_id INTEGER PRIMARY KEY,
     age TEXT,
     gender TEXT,
-    fav_music_genre TEXT,
-    CONSTRAINT unique_user_genre_constraint UNIQUE (user_id, fav_music_genre)
+    fav_music_genre TEXT
 );
 
 INSERT INTO musicschema.fct_user_genre
@@ -15,7 +15,4 @@ SELECT
     gender,
     fav_music_genre
 FROM musicschema.stg_kaggle_spotify_users
-ON CONFLICT (user_id) DO UPDATE
-SET 
-    age = EXCLUDED.age,
-    gender = EXCLUDED.gender;
+

@@ -7,4 +7,3 @@ def execute():
     connection = create_connection()
     execute_hook_statements(connection,'SQL_Commands')
     connection.close()
-

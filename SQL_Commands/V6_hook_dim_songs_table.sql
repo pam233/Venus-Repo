@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS musicschema.dim_songs
 (
-    --id serial PRIMARY KEY,--
+   
     track_id INT PRIMARY KEY,
     track_name TEXT,
     track_artist TEXT,

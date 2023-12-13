@@ -7,3 +7,4 @@ CREATE TABLE IF NOT EXISTS musicschema.stg_kaggle_spotify_users (
     music_lis_frequency TEXT,
     music_satisfaction TEXT
 );
+

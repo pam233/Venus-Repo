@@ -7,8 +7,7 @@ import etl_handler
 def execute():
      
      db_session = create_connection()
-     etl_handler.update_or_insert_etl_watermark(db_session)
-
+     etl_handler.update_etl_watermark(db_session,'stg_kaggle_spotify_tracks',0)
+     etl_handler.update_etl_watermark(db_session,'stg_kaggle_spotify_users',1)
      execute_posthook_statements(db_session,'SQL_Commands')
-    # etl_handler.update_etl_watermark()
      db_session.close()

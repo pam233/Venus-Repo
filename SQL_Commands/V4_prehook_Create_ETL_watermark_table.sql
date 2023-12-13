@@ -1,5 +1,7 @@
-CREATE TABLE IF NOT EXISTS musicschema.etl_watermark
-(
-  /*ID SERIAL PRIMARY KEY NOT NULL,*/
-  last_update_timestamp TIMESTAMP
+
+CREATE TABLE IF NOT EXISTS musicschema.etl_watermark (
+    id SERIAL PRIMARY KEY,
+    table_name TEXT,
+    etl_last_id INT
 );
+ 

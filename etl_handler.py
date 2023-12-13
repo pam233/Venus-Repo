@@ -1,35 +1,49 @@
+
+
 import db_handler
 import data_handler
 from datetime import datetime
 
-
-
-def return_etl_watermark(db_session):
-    # returns all timestamps for the updates
+def insert_initial_etl_watermark(db_session, table_name):
+    insert_query = """
+        INSERT INTO musicschema.etl_watermark (table_name, etl_last_id)
+        VALUES (%s, %s);
+    """
+ 
+    with db_session.cursor() as cursor:
+        cursor.execute(insert_query, (table_name, 0))
+ 
+    db_session.commit()
+ 
+def return_etl_watermark(db_session, table_name):
     query = """
         SELECT 
-            last_update_timestamp
-        FROM musicschema.etl_watermark
+            etl_last_id
+        FROM musicschema.etl_watermark 
+        WHERE table_name = %s
     """
-    etl_return = data_handler.return_query_as_dataframe(db_session, query)
-    
-    # Check if the DataFrame is empty
-    if etl_return.empty:
-        return ['01/01/1900']  
-    return_etl_field = etl_return['last_update_timestamp'].tolist()
-    
-    return return_etl_field
-
-
-
-
-def update_or_insert_etl_watermark(db_session):
-    query = "SELECT COUNT(1) AS total_records FROM musicschema.etl_watermark"
-    return_data = data_handler.return_query_as_dataframe(db_session, query)
-    total_records = return_data['total_records'].iloc[0]
-    if total_records > 0:
-        query = f"""UPDATE musicschema.etl_watermark SET last_update_timestamp = '{datetime.now()}'"""
-    else:
-        query = f""" INSERT INTO musicschema.etl_watermark (last_update_timestamp) VALUES ('{datetime.now()}')"""
-    db_handler.execute_query(db_session, query)
+    with db_session.cursor() as cursor:
+        cursor.execute(query, (table_name,))
+ 
+        etl_return = cursor.fetchall()
+ 
+    print(f"ETL Return for table '{table_name}': {etl_return}")
+    if not etl_return:
+        print("No ETL record found. Returning 0.")
+        return 0
+    return_etl_field = etl_return[0][0]
+    return int(return_etl_field)
+ 
+def update_etl_watermark(db_session, table_name, last_id):
+    update_query = """
+        UPDATE musicschema.etl_watermark
+        SET etl_last_id = %s
+        WHERE table_name = %s;
+    """
+    with db_session.cursor() as cursor:
+        cursor.execute(update_query, (int(last_id), table_name))
+ 
+    print(f"ETL watermark updated for table '{table_name}' with last_id = {last_id}.")
     db_session.commit()
+
+
